@@ -1,7 +1,6 @@
 package main
 
 import "testing"
-import "fmt"
 
 func TestCreatePrimeMap(t *testing.T) {
 	tests := []struct {
@@ -26,4 +25,28 @@ func TestCreatePrimeMap(t *testing.T) {
 		}
 	}
 
+}
+
+func TestCreateNumber(t *testing.T) {
+	tests := []struct {
+		word    []rune
+		mapping map[int32]int64
+		num     int64
+		err     error
+	}{
+		{[]rune{'A', 'n', 'n', 'a'}, map[int32]int64{65: 2, 110: 3, 97: 5}, 90, nil},
+		{[]rune{'a', 'n', 'n', 'a'}, map[int32]int64{110: 2, 97: 3}, 36, nil},
+		{[]rune{'世', '界'}, map[int32]int64{19990: 2, 30028: 3}, 6, nil},
+		{[]rune{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!'}, map[int32]int64{72: 2, 101: 3, 111: 7, 87: 13, 114: 17, 100: 19, 108: 5, 32: 11, 33: 23}, 39041252250, nil},
+	}
+
+	for _, test := range tests {
+		num, err := createNumber(test.word, test.mapping)
+		if err != test.err {
+			t.Errorf("Expected: %v \t Got: %v", test.err, err)
+		}
+		if num != test.num {
+			t.Errorf("Expected: %v \t Got: %v", test.num, num)
+		}
+	}
 }

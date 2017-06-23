@@ -1,6 +1,7 @@
 package main
 
 import "testing"
+import "errors"
 
 func TestCreatePrimeMap(t *testing.T) {
 	tests := []struct {
@@ -38,11 +39,15 @@ func TestCreateNumber(t *testing.T) {
 		{[]rune{'a', 'n', 'n', 'a'}, map[int32]int64{110: 2, 97: 3}, 36, nil},
 		{[]rune{'世', '界'}, map[int32]int64{19990: 2, 30028: 3}, 6, nil},
 		{[]rune{'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!'}, map[int32]int64{72: 2, 101: 3, 111: 7, 87: 13, 114: 17, 100: 19, 108: 5, 32: 11, 33: 23}, 39041252250, nil},
+		{[]rune{'a', 'b', 'c'}, map[int32]int64{97: 2, 98: 3}, -1, errors.New("\"c\" is missing in mapping")},
 	}
 
 	for _, test := range tests {
 		num, err := createNumber(test.word, test.mapping)
-		if err != test.err {
+		if err != nil && test.err != nil {
+			t.Log("Expected: ", test.err, "\t Got: ", err)
+		} else if err != nil && test.err == nil {
+
 			t.Errorf("Expected: %v \t Got: %v", test.err, err)
 		}
 		if num != test.num {

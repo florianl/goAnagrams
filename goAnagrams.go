@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"math/big"
 	"os"
@@ -41,14 +42,32 @@ func createPrimeMap(word []rune) (map[int32]int64, error) {
 }
 
 func main() {
+	help := flag.Bool("help", false, "Show this help")
+	flag.Parse()
 
-	if len(os.Args) != 3 {
-		fmt.Println("Incorrect number of arguments")
-		os.Exit(-1)
+	if *help {
+		fmt.Println(os.Args[0], "[-verbose] [-help] <word1> <word2>")
+		flag.PrintDefaults()
+		return
 	}
 
-	word1 := []rune(os.Args[1])
-	word2 := []rune(os.Args[2])
+	switch len(flag.Args()) {
+	case 0:
+		fmt.Println("<word1> and <word2> are required")
+		return
+	case 1:
+		fmt.Println("<word2> is also required")
+		return
+	case 2:
+		break
+	default:
+		fmt.Println("Too much arguments")
+		return
+	}
+
+	words := flag.Args()
+	word1 := []rune(words[0])
+	word2 := []rune(words[0])
 
 	if len(word1) != len(word2) {
 		fmt.Println(string(word1), "and", string(word2), "are not anagrams")

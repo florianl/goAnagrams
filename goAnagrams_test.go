@@ -47,7 +47,6 @@ func TestCreateNumber(t *testing.T) {
 		if err != nil && test.err != nil {
 			t.Log("Expected: ", test.err, "\t Got: ", err)
 		} else if err != nil && test.err == nil {
-
 			t.Errorf("Expected: %v \t Got: %v", test.err, err)
 		}
 		if num != test.num {

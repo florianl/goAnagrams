@@ -42,6 +42,8 @@ func createPrimeMap(word []rune) (map[int32]int64, error) {
 }
 
 func main() {
+
+	verbose := flag.Bool("verbose", false, "Print verbose output")
 	help := flag.Bool("help", false, "Show this help")
 	flag.Parse()
 
@@ -67,7 +69,7 @@ func main() {
 
 	words := flag.Args()
 	word1 := []rune(words[0])
-	word2 := []rune(words[0])
+	word2 := []rune(words[1])
 
 	if len(word1) != len(word2) {
 		fmt.Println(string(word1), "and", string(word2), "are not anagrams")
@@ -82,17 +84,22 @@ func main() {
 
 	num1, err := createNumber(word1, primeMap)
 	if err != nil {
-		fmt.Println(err)
+		if *verbose {
+			fmt.Println(err)
+		}
 		os.Exit(-1)
 	}
 	num2, err := createNumber(word2, primeMap)
 	if err != nil {
-		fmt.Println(err)
+		if *verbose {
+			fmt.Println(err)
+		}
 		os.Exit(-1)
 	}
 	if num1 == num2 {
 		fmt.Println(string(word1), "and", string(word2), "are probably anagrams")
 	} else {
 		fmt.Println(string(word1), "and", string(word2), "are not anagrams")
+		os.Exit(1)
 	}
 }
